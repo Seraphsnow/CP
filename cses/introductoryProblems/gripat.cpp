@@ -34,18 +34,18 @@ class path
 {
 public:
     string mystr;
-    ll numU, numL,numD, numR;
-    path()
-    {
-        path("", 0,  0, 0, 0);
-    }
-    path(string str, ll u, ll l ,ll d, ll r)
+    bool** arr;
+    ll numU, numL,numD, numR, numvisit;
+    
+    path(string str, ll u, ll l ,ll d, ll r, ll n, bool ** arr1)
     {
         numU = u;
         numL = l;
         numD = d;
         numR = r;
         mystr = str;
+        numvisit = n;
+        
     }
 
 };
@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
     string inp;
     cin >> inp;
     vector<path> strings;
-    path emptyPath("");
+    path emptyPath("",0,0,0,0);
     strings.push_back(emptyPath);
     for(int i = 0; i < 48; i++){
         vector<path> newStrings = strings;
