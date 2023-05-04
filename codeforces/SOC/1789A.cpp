@@ -31,16 +31,6 @@ void printVector(vector<T> arr)
          << endl;
 }
 
-template <typename T>
-T gcd(T a, T b){
-    if(a%b == 0){
-        return b;
-    }
-    else{
-        return gcd(b, a%b);
-    }
-}
-
 void adv_tokenizer(string s, char del)//Split string
 {
     stringstream ss(s);
@@ -51,6 +41,42 @@ void adv_tokenizer(string s, char del)//Split string
     }
 }
 
+template <typename T>
+T gcd(T a, T b){
+    if(a%b == 0){
+        return b;
+    }
+    else{
+        return gcd(b, a%b);
+    }
+}
+
+void solve(){
+    ll n;
+    cin >> n;
+    ll arr[n];
+    for(int i = 0; i < n; i++){
+        cin >> arr[i];
+    }
+    ll minGCD = gcd<ll>(arr[0],arr[1]);
+    for(int i = 0; i < n; i++){
+        for(int j = i+1; j < n; j++){
+            minGCD = min(minGCD, gcd<ll>(arr[i],arr[j]));
+            if(minGCD <=2){
+                cout << 'YES\n';
+                return;
+            }
+        }
+    }
+    if(minGCD >2){
+        cout << "NO\n";
+    }
+}
+
 int main(int argc, char*argv[]){
-    
+    ll t;
+    cin >> t;
+    while(t--){
+        solve();
+    }
 }

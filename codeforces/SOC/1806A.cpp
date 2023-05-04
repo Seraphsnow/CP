@@ -31,16 +31,6 @@ void printVector(vector<T> arr)
          << endl;
 }
 
-template <typename T>
-T gcd(T a, T b){
-    if(a%b == 0){
-        return b;
-    }
-    else{
-        return gcd(b, a%b);
-    }
-}
-
 void adv_tokenizer(string s, char del)//Split string
 {
     stringstream ss(s);
@@ -51,6 +41,24 @@ void adv_tokenizer(string s, char del)//Split string
     }
 }
 
+void solve(){
+    ll a,b,c,d;
+    cin >> a >> b >> c >> d;
+    if(d < b){
+        cout << -1 << endl;
+        return;
+    }
+    if((d-b) < (c-a)){
+        cout << -1 << endl;
+        return;
+    }
+    cout << (d-b) + (d+a-c-b) << endl;
+}
+
 int main(int argc, char*argv[]){
-    
+    ll t;
+    cin >> t;
+    while(t--){
+        solve();
+    }
 }
