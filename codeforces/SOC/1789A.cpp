@@ -63,13 +63,16 @@ void solve(){
         for(int j = i+1; j < n; j++){
             minGCD = min(minGCD, gcd<ll>(arr[i],arr[j]));
             if(minGCD <=2){
-                cout << 'YES\n';
+                cout << "YES\n";
                 return;
             }
         }
     }
     if(minGCD >2){
         cout << "NO\n";
+    }
+    else{
+        cout << "YES\n";
     }
 }
 

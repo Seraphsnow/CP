@@ -59,56 +59,34 @@ void adv_tokenizer(string s, char del) // Split string
     }
 }
 
-bool comp(pll p1, pll p2)
-{
-    return p1.fi > p2.fi;
-}
-
-ll solve()
+void solve()
 {
     ll n;
     cin >> n;
-    if (n == 0)
+    string s;
+    cin >> s;
+    ll idex1 = 0, idex2 = n - 1;
+    while (idex1 < idex2)
     {
-        return -1;
+        if (s[idex1] == s[idex2])
+        {
+            break;
+        }
+        else
+        {
+            idex1 += 1;
+            idex2--;
+        }
     }
-    pll heights[n];
-    ll arr1[n + 1], arr2[n + 1];
-    for (int i = 0; i < n; i++)
-    {
-        cin >> heights[i].fi;
-        heights[i].se = i;
-        arr1[i] = i;
-        arr2[i] = i;
-    }
-    arr1[n] = n;
-    arr2[n] = n;
-    sort(heights, heights + n, comp);
-    ll maxArea = heights[0].fi;
-    arr1[heights[0].se + 1] = heights[0].se;
-    arr2[heights[0].se] = heights[0].se + 1;
-    for (int i = 1; i < n; i++)
-    {
-        ll area = (arr2[heights[i].se + 1] - arr1[heights[i].se]) * heights[i].fi;
-        maxArea = max(maxArea, area);
-        arr1[arr2[heights[i].se + 1]] = arr1[heights[i].se];
-        arr2[arr1[heights[i].se]] = arr2[heights[i].se + 1];
-    }
-    return maxArea;
+    cout << idex2 - idex1 + 1 << "\n";
 }
 
 int main(int argc, char *argv[])
 {
-
-    while (true)
+    ll t;
+    cin >> t;
+    while (t--)
     {
-        ll ans = solve();
-        if (ans == -1)
-        {
-            break;
-        }
-        else{
-            cout << ans << endl;
-        }
+        solve();
     }
 }
