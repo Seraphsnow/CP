@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
 {
     ll n, m;
     cin >> n >> m;
-    ll arr2[n];
+    ll arr3[n], arr2[n];
     pair<pll, ll> arr[n];
     for (int i = 0; i < n; i++)
     {
@@ -52,23 +52,22 @@ int main(int argc, char *argv[])
             a = b;
             b = temp;
         }
-
+// b is greater than a
+        if(a == b){
+            cout << rounds << endl;
+            continue;
+        }
+        a--;
+        b--;
         ll num1 = arr2[a], num2 = arr2[b];
-        if (num1 < num2)
-        {
-            rounds++;
-            cout << rounds << endl;
-        }
-        else
-        {
-            rounds--;
-            cout << rounds << endl;
-        }
+        arr2[b] = num1;
+        arr2[a] = num2;
 
-        ll temp = arr2[a];
-        arr2[a] = arr2[b];
-        arr2[b] = temp;
-        arr[num1 - 1].se = b - 1;
-        arr[num2 - 1].se = a - 1;
+
+
+        arr[num1-1].fi.se = b;
+        
+        arr[num2-1].fi.se = a;
+
     }
 }
