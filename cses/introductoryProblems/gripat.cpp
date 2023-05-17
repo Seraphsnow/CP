@@ -30,45 +30,103 @@ void printArr(T *arr, ll n)
          << endl;
 }
 
-class path
+class my
 {
 public:
-    string mystr;
-    bool** arr;
-    ll numU, numL,numD, numR, numvisit;
-    
-    path(string str, ll u, ll l ,ll d, ll r, ll n, bool ** arr1)
+    ll left, right, down, up;
+    bool arr[7][7];
+    my()
     {
-        numU = u;
-        numL = l;
-        numD = d;
-        numR = r;
-        mystr = str;
-        numvisit = n;
-        
+        // for (int i = 0; i < 7; i++)
+        // {
+        //     for (int j = 0; j < 7; j++)
+        //     {
+        //         arr[i][j] = 0;
+        //     }
+        // }
     }
-
+    my(bool arr2[7][7])
+    {
+        for (int i = 0; i < 7; i++)
+        {
+            for (int j = 0; j < 7; j++)
+            {
+                arr[i][j] = arr2[i][j];
+            }
+        }
+    }
+    bool set(ll l, ll r, ll d, ll u)
+    {
+        left = l;
+        right = r;
+        down = d;
+        up = u;
+        if (d > u + 6 || d < u || r > l + 6 || r < l || arr[right - left][down - up] || (l + r + d + u != 48 && r == l && d == u+6))
+        {
+            return false;
+        }
+        else
+        {
+            arr[right - left][down - up] = 1;
+            return true;
+        }
+    }
 };
-
-bool partValid(path str){
-    if(str.mystr.size() != 48){
-
-    }
-}
 
 int main(int argc, char *argv[])
 {
     string inp;
     cin >> inp;
-    vector<path> strings;
-    path emptyPath("",0,0,0,0);
-    strings.push_back(emptyPath);
-    for(int i = 0; i < 48; i++){
-        vector<path> newStrings = strings;
-        strings.clear();
-        for(int j = 0; j < newStrings.size(); j++){
-            path newp(newStrings[i].mystr+"U");
-            if(partValid(newp))
+    queue<my *> paths; // up down left right
+    my *zero;
+    zero = new my();
+    bool possible = zero->set(0, 0, 0, 0);
+    paths.push(zero);
+    for (int i = 0; i < inp.size(); i++)
+    {
+        ll num = paths.size();
+        for (int j = 0; j < num; j++)
+        {
+            my *p = paths.front();
+            if (inp[i] == '?' || inp[i] == 'D')
+            {
+                my *path;
+                path = new my(p->arr);
+                if (path->set(p->left, p->right, p->down + 1, p->up))
+                {
+                    paths.push(path);
+                }
+            }
+            if (inp[i] == '?' || inp[i] == 'U')
+            {
+                my *path;
+                path = new my(p->arr);
+                if (path->set(p->left, p->right, p->down, p->up + 1))
+                {
+                    paths.push(path);
+                }
+            }
+            if (inp[i] == '?' || inp[i] == 'L')
+            {
+                my *path;
+                path = new my(p->arr);
+                if (path->set(p->left + 1, p->right, p->down, p->up))
+                {
+                    paths.push(path);
+                }
+            }
+            if (inp[i] == '?' || inp[i] == 'R')
+            {
+                my *path;
+                path = new my(p->arr);
+                if (path->set(p->left, p->right + 1, p->down, p->up))
+                {
+                    paths.push(path);
+                }
+            }
+            paths.pop();
         }
+        cout << paths.size() << endl;
     }
+    cout << paths.size() << endl;
 }

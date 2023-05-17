@@ -1,94 +1,131 @@
 #include <bits/stdc++.h>
-#include <limits.h>
-// For policy data structures
-// #include <ext/pb_ds/assoc_container.hpp>
-// #include <ext/pb_ds/tree_policy.hpp>
-
-// using namespace __gnu_pbds;
-
 using namespace std;
 
-#define ll long long int
+// For policy data structures
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+
+using namespace __gnu_pbds;
+
+#define ll long long
 #define ld long double
 #define fi first
 #define se second
 #define pb push_back
-#define pll pair<ll, ll>
+#define pll pair<long long, long long>
 #define ppll pair<pll, pll>
-#define ull unsigned long long
+
+typedef tree<ll,null_type,less_equal<int>,rb_tree_tag,
+tree_order_statistics_node_update> indexed_set;
+
+typedef tree<ll,null_type,greater_equal<int>,rb_tree_tag,
+tree_order_statistics_node_update> indexed_set2;
+
 
 template <typename T>
-void printArr(T *arr, ll n)
+void printArr(T *arr, ll size)
 {
     cout << endl
          << endl;
-    for (int i = 0; i < n; i++)
+    for (ll i = 0; i < size; i++)
     {
-        cout << arr[i] << endl;
+        cout << i << ": " << arr[i] << endl;
     }
     cout << endl
          << endl;
 }
 
-bool comp1(ppll p1, ppll p2)
+template <typename T>
+void printVector(vector<T> arr)
 {
-    return p1.fi.fi < p2.fi.fi || (p1.fi.fi == p2.fi.fi && p1.fi.se > p2.fi.se);
-}
-bool comp2(ppll p1, ppll p2)
-{
-    return p1.se.fi < p2.se.fi;
+    cout << endl
+         << endl;
+    for (ll i = 0; i < arr.size(); i++)
+    {
+        cout << i << ": " << arr[i] << endl;
+    }
+    cout << endl
+         << endl;
 }
 
-bool comp3(ppll p1, ppll p2)
+template <typename T>
+T gcd(T a, T b)
 {
-    return p1.fi.fi > p2.fi.fi || (p1.fi.fi == p2.fi.fi && p1.fi.se < p2.fi.se);
+    if (a % b == 0)
+    {
+        return b;
+    }
+    else
+    {
+        return gcd(b, a % b);
+    }
+}
+
+void adv_tokenizer(string s, char del) // Split string
+{
+    stringstream ss(s);
+    string word;
+    while (!ss.eof())
+    {
+        getline(ss, word, del);
+        cout << word << endl;
+    }
+}
+
+class Range{
+    public:
+        ll left, right;
+        ll index;
+        ll inside;
+        ll covers;
+        Range(){
+            inside = 0;
+            covers = 0;
+        };
+};
+
+bool comp(Range r1, Range r2){
+    return r1.left < r2.left || (r1.left == r2.left && r1.right > r2.right);
+}
+
+bool comp2(Range r1, Range r2){
+    return r1.index < r2.index;
 }
 
 int main(int argc, char *argv[])
 {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
     ll n;
     cin >> n;
-    ppll arr[n];
-    for (int i = 0; i < n; i++)
-    {
-        cin >> arr[i].fi.fi >> arr[i].fi.se;
-        arr[i].se.fi = i;
-        arr[i].se.se = 0;
-    }
-    sort(arr,arr+n,comp3);
-    ll count = 0;
-    ll minb = LONG_LONG_MAX;
+    Range arr[n];
     for(int i = 0; i < n; i++){
-        if(minb <= arr[i].fi.se){
-            arr[i].se.se = count;
-        }
-        else{
-            minb = arr[i].fi.se;
-            count++;
-        }
+        cin >> arr[i].left >> arr[i].right;
+        arr[i].index = i;
     }
-    sort(arr, arr+n, comp2);
+    sort(arr, arr+n, comp);
+    indexed_set s;
+    for(int i = n-1; i >= 0; i--){
+        s.insert(arr[i].right);
+        ll nums = s.order_of_key(arr[i].right+1);
+        arr[i].covers = nums-1;
+        
+    }
+    indexed_set2 s1;
     for(int i = 0; i < n; i++){
-        cout << arr[i].se.se << " ";
-        arr[i].se.se = 0;
+        s1.insert(arr[i].right);
+        ll nums = s1.order_of_key(arr[i].right-1);
+        arr[i].inside = nums-1;
     }
 
-    cout << endl ;
-
-    sort(arr, arr + n, comp1);
-    ll maxb = LONG_LONG_MIN;
-    count = 0;
+    sort(arr,arr+n, comp2);
     for(int i = 0; i < n; i++){
-        if(maxb >= arr[i].fi.se){
-            arr[i].se.se = count;
-        }
-        else{
-            maxb = arr[i].fi.se;
-            count++;
-        }
+        cout << arr[i].covers << " ";
     }
-    sort(arr, arr+n, comp2);
+    cout << "\n";
     for(int i = 0; i < n; i++){
-        cout << arr[i].se.se << " ";
+        cout << arr[i].inside << " ";
     }
+    cout << "\n";
 }

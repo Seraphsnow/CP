@@ -48,14 +48,25 @@ int main(int argc, char*argv[]){
     time = (time1 + time2) / 2;
     ll ans = num(times,time,n);
     while(time2!=time1){
-        if(ans<= t){
-            time2 = time;
+        if(ans< t){
+            time1 = time;
         }
         else{
-            time1 = time;
+            time2 = time;
+        }
+        if(time2 == time1+1){
+            if(num(times,time1,n)>=t){
+                time = time1;
+
+            }
+            else{
+                time = time2;
+            }
+            break;
         }
         time = (time1+time2)/2;
         ans = num(times,time,n);
+        //cout << time << " " << ans << endl;
     }
     cout << time << endl;
 }
