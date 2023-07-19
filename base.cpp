@@ -7,6 +7,7 @@ using namespace std;
 
 // using namespace __gnu_pbds;
 
+//#define ordered_set tree<int,null_type,less<int>,rb_tree_tag,tree_order_statistics_node_update>
 
 #define ll long long
 #define ld long double
@@ -55,6 +56,27 @@ T gcd(T a, T b)
     }
 }
 
+template <typename T>
+T min3(T a, T b, T c){
+    return min<T>(a,min<T>(b,c));
+}
+
+template <typename T>
+T min4(T a, T b, T c, T d){
+    return min<T>(min<T>(a,d),min<T>(b,c));
+}
+
+template <typename T>
+T max3(T a, T b, T c){
+    return max<T>(a,max<T>(b,c));
+}
+
+template <typename T>
+T max4(T a, T b, T c, T d){
+    return max<T>(max<T>(a,d),max<T>(b,c));
+}
+
+
 void adv_tokenizer(string s, char del) // Split string
 {
     stringstream ss(s);
@@ -65,6 +87,51 @@ void adv_tokenizer(string s, char del) // Split string
         cout << word << endl;
     }
 }
+
+ll mypow(ll a, ll b, ll m)
+{
+    ll ans = 1, pow = a;
+    while(b>0){
+        if(b%2 == 1){
+            ans = (ans * pow)%m;
+        }
+        pow = (pow * pow) % m;
+        b = b/2;
+    }
+    return ans;
+}
+
+ll modInverse(ll A, ll M)
+{
+    ll m0 = M;
+    ll y = 0, x = 1;
+ 
+    if (M == 1)
+        return 0;
+ 
+    while (A > 1) {
+        // q is quotient
+        ll q = A / M;
+        ll t = M;
+ 
+        // m is remainder now, process same as
+        // Euclid's algo
+        M = A % M, A = t;
+        t = y;
+ 
+        // Update y and x
+        y = x - q * y;
+        x = t;
+    }
+ 
+    // Make x positive
+    if (x < 0)
+        x += m0;
+ 
+    return x;
+}
+
+
 
 int main(int argc, char *argv[])
 {

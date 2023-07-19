@@ -7,7 +7,6 @@ using namespace std;
 
 // using namespace __gnu_pbds;
 
-
 #define ll long long
 #define ld long double
 #define fi first
@@ -66,19 +65,76 @@ void adv_tokenizer(string s, char del) // Split string
     }
 }
 
+bool poss(ll *arr, ll n, ll k, ll maxsum)
+{
+    ll sum = 0;
+    ll left = k;
+    for (int i = 0; i < n; i++)
+    {
+        if (arr[i] > maxsum)
+        {
+            return false;
+        }
+        if (sum + arr[i] <= maxsum)
+        {
+            sum += arr[i];
+        }
+        else
+        {
+            sum = arr[i];
+            left--;
+            if (left <= 0)
+            {
+                return false;
+            }
+        }
+    }
+    if (left >= 1)
+    {
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
 int main(int argc, char *argv[])
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    ll n,k;
+    ll n, k;
     cin >> n >> k;
-    ll pref[n+1];
-    pref[0] = 0;
-    for(int i = 0; i < n; i++){
+    ll arr[n];
+    for (int i = 0; i < n; i++)
+    {
         ll num;
-        cin >> num;
-        pref[i+1] = pref[i]+num;
+        cin >> arr[i];
     }
-    ll wanted = pref[n]/k;
-    
+    ll max = 1;
+    while (true)
+    {
+        if (poss(arr, n, k, max))
+        {
+            break;
+        }
+        else
+        {
+            max = max * 2;
+        }
+        //cout << max << endl;
+    }
+    ll min = max/2;
+    while(true){
+        if(min == max){
+            cout << min << endl;
+            return 0;
+        }
+        ll mid = (min+max)/2;
+        if(poss(arr, n, k, mid)){
+            max = mid;
+        }
+        else{
+            min = mid+1;
+        }
+    }
 }

@@ -32,7 +32,7 @@ void printArr(T *arr, ll n)
 
 bool comp(pair<pll, ll> p1, pair<pll, ll> p2)
 {
-    return p1.fi.fi < p2.fi.fi || (p1.fi.fi == p2.fi.fi && p1.fi.se < p2.fi.se);
+    return p1.fi.fi < p2.fi.fi || (p1.fi.fi == p2.fi.fi && p1.fi.se < p2.fi.se) || (p1.fi.fi == p2.fi.fi && p1.fi.se == p2.fi.se && p1.se < p2.se);
 }
 
 int main(int argc, char *argv[])
@@ -40,46 +40,56 @@ int main(int argc, char *argv[])
     ll n;
     cin >> n;
     pair<pll, ll> arr[n];
-    ll mymax = 0;
+    pll arr2[n];
     for (int i = 0; i < n; i++)
     {
         cin >> arr[i].fi.fi >> arr[i].fi.se >> arr[i].se;
-        mymax = max<ll>(mymax, arr[i].fi.se);
     }
+
     sort(arr, arr + n, comp);
-    ll inters[n];
-    ll index = 0;
-    for (int i = 0; i < n; i++)
+    for(int i = 0; i < n; i++){
+        arr2[i] = {arr[i].fi.se, i};
+    }
+    sort(arr2, arr2+n);
+    ll reward[n + 1];
+    reward[n] = 0;
+    ll next[n];
+    ll currindex = 0, nextindex = 1;
+    while (currindex < n)
     {
-        while (true)
+        if (nextindex == n)
         {
-            if (index == n)
+            next[arr2[currindex].se] = nextindex;
+            currindex++;
+        }
+        else
+        {
+            while (nextindex < n)
             {
-                inters[i] = n;
-                break;
-            }
-            else{
-                if(arr[index].fi.se <= arr[i].fi.fi){
-                    index++;
+                if (arr2[currindex].fi >= arr[nextindex].fi.fi)
+                {
+                    nextindex++;
                 }
-                else{
-                    inters[i] = index;
+                else
+                {
                     break;
                 }
             }
+            next[arr2[currindex].se] = nextindex;
+            currindex++;
         }
     }
-
-    ll arr2[n];
-    arr2[n-1] = arr[n-1].se;
-    for (int i = n - 2; i >= 0; i++)
+    for (int i = n - 1; i >= 0; i--)
     {
-        if(inters[i] == n){
-            arr2[i] = max(arr[i].se, arr2[i+1]);
-        }
-        else{
-            arr2[i] = max(arr[i].se+arr2[inters[i]], arr2[i+1]);
-        }
+        reward[i] = max<ll>(reward[i + 1], reward[next[i]] + arr[i].se);
     }
-    cout << arr2[0] << endl;
+    // for (int i = 0; i < n; i++)
+    // {
+    //     cout << i <<" " <<arr[i].fi.fi << " " << arr[i].fi.se << "  " << arr[i].se << " " << next[i] << endl;
+    // }
+    // for (int i = 0; i < n; i++)
+    // {
+    //     cout << reward[i] << endl;
+    // }
+    cout << reward[0] << endl;
 }

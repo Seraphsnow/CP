@@ -30,45 +30,55 @@ int main(int argc, char *argv[])
     int n, x;
     cin >> n >> x;
     int coins[n];
+    int currgcd = x;
     for (int i = 0; i < n; i++)
     {
         cin >> coins[i];
     }
-    int **arr;
-    arr = new int *[x + 1];
-    for (int i = 0; i <= x; i++)
-    {
-        arr[i] = new int[n];
-    }
-    sort(coins, coins + n, greater<ll>());
-    for (int i = 1; i <= x; i++)
+    pair<int,int> *arr;
+    arr = new pair<int,int> [x + 1];
+    sort(coins, coins + n);
+    
+    for (int i = 1; i <= x; i++)// any number 
     {
         if (i % coins[0] == 0)
         {
-            arr[i][0] = 1;
-        }
-        else
-        {
-            arr[i][0] = 0;
+            arr[i].fi = 1;
         }
     }
-    for (int i = 1; i <= x; i++)
-    {
-        for (int j = 1; j <= n - 1; j++)
-        {
-            if (i > coins[j])
-            {
-                arr[i][j] = (arr[i - coins[j]][j] + arr[i][j - 1]) % MOD;
+    arr[0].fi = 1;
+    if(n == 1){
+        cout << arr[x].fi << endl;
+        return 0;
+    }
+    // for (int i = 1; i <= x; i++)
+    // {
+    //     for (int j = 1; j <= n - 1; j++)
+    //     {
+    //         arr[i][j] = arr[i][j-1];
+    //         if (i >= coins[j])
+    //         {
+    //             arr[i][j] = arr[i][j] + arr[i-coins[j]][j];
+    //             if(arr[i][j]>=1000000007){
+    //                 arr[i][j]-=1000000007;
+    //             }
+    //         }
+    //     }
+    // }
+    for(int j = 1; j < n; j++){
+        for(int i = 0; i<=x; i++){
+            if(i>=coins[j]){
+                arr[i].se = (arr[i-coins[j]].se+arr[i].fi) % 1000000007;
             }
-            else if (i == coins[j])
-            {
-                arr[i][j] = 1;
-            }
-            else
-            {
-                arr[i][j] = 0;
+            else{
+                arr[i].se = arr[i].fi;
             }
         }
+        for(int i = 0; i <=x; i++){
+            arr[i].fi = arr[i].se;
+        }
     }
-    cout << arr[x][n-1] << endl;
+
+    
+    cout << arr[x].se << endl;
 }

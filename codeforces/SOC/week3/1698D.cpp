@@ -67,7 +67,32 @@ void adv_tokenizer(string s, char del) // Split string
 
 void solve()
 {
-    
+    ll n;
+    cin >> n;
+    ll min = 1, max = n;
+    while(true){
+        if(max == min){
+            cout << "! " << max << endl;
+            return;
+        }
+        ll mid = (min+max)/2;
+        cout << "? " << min << " " << mid << endl;
+        cout.flush();
+        ll out = 0;
+        for(int i = min; i <= mid; i++){
+            ll num;
+            cin >> num;
+            if(num  < min || num > mid){
+                out++;
+            }
+        }
+        if((mid-min+1 - out) % 2 == 1){
+            max = mid;
+        }
+        else{
+            min = mid+1;
+        }
+    }
 }
 
 int main(int argc, char *argv[])

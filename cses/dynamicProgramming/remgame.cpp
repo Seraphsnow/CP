@@ -9,53 +9,116 @@ using namespace std;
 #define pb push_back
 #define pll pair<ll, ll>
 
-ll opt(ll i, ll j, ll **arr, ll *num, ll n)
+pll **a;
+ll *num;
+
+pll funa(ll i, ll j)
 {
-    if (i >= n || j >= n || i <= 0 || j <= 0)
-    {
-        return 0;
-    }
-    if (arr[i][j] != -1)
-    {
-        return arr[i][j];
-    }
     if (i == j)
     {
-        arr[i][j] = num[i];
-        return arr[i][j];
+        return {i, num[i]};
     }
-    else if (i > j)
+    if (i == (j - 1))
     {
-        arr[i][j] = 0;
-        return 0;
+        if (num[i] > num[j])
+        {
+            return {i, num[i]};
+        }
+        else
+        {
+            return {j, num[j]};
+        }
+    }
+    if (a[i][j].fi != -1)
+    {
+        return a[i][j];
+    }
+    pll p1 = funa(i + 1, j);
+    pll p2 = funa(i, j - 1);
+    if (p1.fi == (i + 1))
+    {
+        if (p2.fi == (i))
+        {
+            if ((num[i] + funa(i + 2, j).se) > (num[j] + funa(i + 1, j - 1).se))
+            {
+                a[i][j] = {i, num[i] + funa(i + 2, j).se};
+                return a[i][j];
+            }
+            else
+            {
+                a[i][j] = {j, num[j] + funa(i + 1, j - 1).se};
+                return a[i][j];
+            }
+        }
+        else
+        {
+            if ((num[i] + funa(i + 2, j).se) > (num[j] + funa(i, j - 2).se))
+            {
+                a[i][j] = {i, num[i] + funa(i + 2, j).se};
+                return a[i][j];
+            }
+            else
+            {
+                a[i][j] = {j, num[j] + funa(i, j - 2).se};
+                return a[i][j];
+            }
+        }
     }
     else
     {
-        ll ans = opt(i + 2, j, arr, num, n) + num[i];
-        ans = max(ans, opt(i + 1, j - 1, arr, num, n) + num[i]);
-        ans = max(ans, opt(i + 1, j - 1, arr, num, n) + num[j]);
-        ans = max(ans, opt(i, j - 2, arr, num, n) + num[j]);
+        if (p2.fi == (i))
+        {
+            if ((num[i] + funa(i + 1, j - 1).se) > (num[j] + funa(i + 1, j - 1).se))
+            {
+                a[i][j] = {i, num[i] + funa(i + 1, j-1).se};
+                return a[i][j];
+            }
+            else
+            {
+                a[i][j] = {j, num[j] + funa(i + 1, j - 1).se};
+                return a[i][j];
+            }
+        }
+        else
+        {
+            if ((num[i] + funa(i + 1, j - 1).se) > (num[j] + funa(i, j - 2).se))
+            {
+                a[i][j] = {i, num[i] + funa(i + 1, j-1).se};
+                return a[i][j];
+            }
+            else
+            {
+                a[i][j] = {j, num[j] + funa(i, j - 2).se};
+                return a[i][j];
+            }
+        }
     }
+}
+
+pll funb(ll i, ll j)
+{
 }
 
 int main(int argc, char *argv[])
 {
     ll n;
     cin >> n;
-    ll num[n];
+    num = new ll[n];
     for (int i = 0; i < n; i++)
     {
         cin >> num[i];
     }
-    ll **arr;
-    arr = new ll *[n];
+    a = new pll *[n];
+    // b = new pll *[n];
     for (int i = 0; i < n; i++)
     {
-        arr[i] = new ll[n];
+        a[i] = new pll[n];
+        // b[i] = new pll[n];
         for (int j = 0; j < n; j++)
         {
-            arr[i][j] = -1;
+            a[i][j] = {-1, -1};
+            // b[i][j] = {-1, -1};
         }
     }
-    cout << opt(0, n - 1, arr, num, n) << endl;
+    cout << funa(0, n-1).se << endl;
 }

@@ -1,132 +1,271 @@
 #include <bits/stdc++.h>
-#include <limits.h>
+using namespace std;
+
 // For policy data structures
 // #include <ext/pb_ds/assoc_container.hpp>
 // #include <ext/pb_ds/tree_policy.hpp>
 
 // using namespace __gnu_pbds;
 
-using namespace std;
+// #define ordered_set tree<int,null_type,less<int>,rb_tree_tag,tree_order_statistics_node_update>
 
-#define ll long long int
+#define ll long long
 #define ld long double
 #define fi first
 #define se second
 #define pb push_back
-#define pll pair<ll, ll>
+#define pll pair<long long, long long>
 #define ppll pair<pll, pll>
-#define ull unsigned long long
 
 template <typename T>
-void printArr(T *arr, ll n)
+void printArr(T *arr, ll size)
 {
     cout << endl
          << endl;
-    for (int i = 0; i < n; i++)
+    for (ll i = 0; i < size; i++)
     {
-        cout << arr[i] << endl;
+        cout << i << ": " << arr[i] << endl;
     }
     cout << endl
          << endl;
 }
 
-class my
+template <typename T>
+void printVector(vector<T> arr)
 {
-public:
-    ll left, right, down, up;
-    bool arr[7][7];
-    my()
+    cout << endl
+         << endl;
+    for (ll i = 0; i < arr.size(); i++)
     {
-        // for (int i = 0; i < 7; i++)
-        // {
-        //     for (int j = 0; j < 7; j++)
-        //     {
-        //         arr[i][j] = 0;
-        //     }
-        // }
+        cout << i << ": " << arr[i] << endl;
     }
-    my(bool arr2[7][7])
+    cout << endl
+         << endl;
+}
+
+template <typename T>
+T gcd(T a, T b)
+{
+    if (a % b == 0)
     {
-        for (int i = 0; i < 7; i++)
+        return b;
+    }
+    else
+    {
+        return gcd(b, a % b);
+    }
+}
+
+template <typename T>
+T min3(T a, T b, T c)
+{
+    return min<T>(a, min<T>(b, c));
+}
+
+template <typename T>
+T min4(T a, T b, T c, T d)
+{
+    return min<T>(min<T>(a, d), min<T>(b, c));
+}
+
+template <typename T>
+T max3(T a, T b, T c)
+{
+    return max<T>(a, max<T>(b, c));
+}
+
+template <typename T>
+T max4(T a, T b, T c, T d)
+{
+    return max<T>(max<T>(a, d), max<T>(b, c));
+}
+
+void adv_tokenizer(string s, char del) // Split string
+{
+    stringstream ss(s);
+    string word;
+    while (!ss.eof())
+    {
+        getline(ss, word, del);
+        cout << word << endl;
+    }
+}
+
+string s;
+
+void search(ll moves, ll &count, bool **arr, ll x, ll y)
+{
+    if (moves == 48)
+    {
+        if (x == 6 && y == 0)
+            count++;
+    }
+    else
+    {
+        if (x == 0)
         {
-            for (int j = 0; j < 7; j++)
+            if (y == 0)
             {
-                arr[i][j] = arr2[i][j];
+                if (!arr[x + 1][y] && (s[moves] == '?' || s[moves] == 'D'))
+                {
+                    arr[x + 1][y] = 1;
+                    search(moves + 1, count, arr, x + 1, y);
+                    arr[x + 1][y] = 0;
+                }
+                if (!arr[x][y + 1] && (s[moves] == '?' || s[moves] == 'R'))
+                {
+                    arr[x][y + 1] = 1;
+                    search(moves + 1, count, arr, x, y + 1);
+                    arr[x][y + 1] = 0;
+                }
+            }
+            else if (y == 6)
+            {
+                if (!arr[x + 1][y] && (s[moves] == '?' || s[moves] == 'D'))
+                {
+                    arr[x + 1][y] = 1;
+                    search(moves + 1, count, arr, x + 1, y);
+                    arr[x + 1][y] = 0;
+                }
+            }
+            else
+            {
+                if (!arr[x + 1][y] && (s[moves] == '?' || s[moves] == 'D'))
+                {
+                    arr[x + 1][y] = 1;
+                    search(moves + 1, count, arr, x + 1, y);
+                    arr[x + 1][y] = 0;
+                }
+                if (!arr[x][y + 1] && (s[moves] == '?' || s[moves] == 'R') && arr[x][y - 1])
+                {
+                    arr[x][y + 1] = 1;
+                    search(moves + 1, count, arr, x, y + 1);
+                    arr[x][y + 1] = 0;
+                }
             }
         }
-    }
-    bool set(ll l, ll r, ll d, ll u)
-    {
-        left = l;
-        right = r;
-        down = d;
-        up = u;
-        if (d > u + 6 || d < u || r > l + 6 || r < l || arr[right - left][down - up] || (l + r + d + u != 48 && r == l && d == u+6))
+        else if (x == 6)
         {
-            return false;
+            if (y == 0)
+            {
+            }
+            else if (y == 6)
+            {
+                if (!arr[x][y - 1] && (s[moves] == '?' || s[moves] == 'L'))
+                {
+                    arr[x][y - 1] = 1;
+                    search(moves + 1, count, arr, x, y - 1);
+                    arr[x][y - 1] = 0;
+                }
+            }
+            else
+            {
+                if (!arr[x - 1][y] && (s[moves] == '?' || s[moves] == 'U'))
+                {
+                    arr[x - 1][y] = 1;
+                    search(moves + 1, count, arr, x - 1, y);
+                    arr[x - 1][y] = 0;
+                }
+                if (!arr[x][y - 1] && (s[moves] == '?' || s[moves] == 'L') && arr[x][y + 1])
+                {
+                    arr[x][y - 1] = 1;
+                    search(moves + 1, count, arr, x, y - 1);
+                    arr[x][y - 1] = 0;
+                }
+            }
         }
         else
         {
-            arr[right - left][down - up] = 1;
-            return true;
+            if (y == 0)
+            {
+                if (!arr[x + 1][y] && (s[moves] == '?' || s[moves] == 'D') && arr[x - 1][y])
+                {
+                    arr[x + 1][y] = 1;
+                    search(moves + 1, count, arr, x + 1, y);
+                    arr[x + 1][y] = 0;
+                }
+                if (!arr[x][y + 1] && (s[moves] == '?' || s[moves] == 'R'))
+                {
+                    arr[x][y + 1] = 1;
+                    search(moves + 1, count, arr, x, y + 1);
+                    arr[x][y + 1] = 0;
+                }
+            }
+            else if (y == 6)
+            {
+                if (!arr[x + 1][y] && (s[moves] == '?' || s[moves] == 'D') && arr[x - 1][y])
+                {
+                    arr[x + 1][y] = 1;
+                    search(moves + 1, count,arr, x + 1, y);
+                    arr[x + 1][y] = 0;
+                }
+                if (!arr[x][y - 1] && (s[moves] == '?' || s[moves] == 'L'))
+                {
+                    arr[x][y - 1] = 1;
+                    search(moves + 1, count, arr, x, y - 1);
+                    arr[x][y - 1] = 0;
+                }
+            }
+            else
+            {
+                if (arr[x - 1][y] || (!arr[x - 1][y] && (!arr[x][y - 1] || !arr[x][y + 1])))
+                {
+                    if (!arr[x + 1][y] && (s[moves] == '?' || s[moves] == 'D'))
+                    {
+                        arr[x + 1][y] = 1;
+                        search(moves + 1, count, arr, x + 1, y);
+                        arr[x + 1][y] = 0;
+                    }
+                }
+                if (arr[x + 1][y] || (!arr[x + 1][y] && (!arr[x][y - 1] || !arr[x][y + 1])))
+                {
+                    if (!arr[x - 1][y] && (s[moves] == '?' || s[moves] == 'U'))
+                    {
+                        arr[x - 1][y] = 1;
+                        search(moves + 1, count, arr, x - 1, y);
+                        arr[x - 1][y] = 0;
+                    }
+                }
+                if (arr[x][y - 1] || (!arr[x][y - 1] && (!arr[x + 1][y] || !arr[x - 1][y])))
+                {
+                    if (!arr[x][y + 1] && (s[moves] == '?' || s[moves] == 'R'))
+                    {
+                        arr[x][y + 1] = 1;
+                        search(moves + 1, count, arr, x, y + 1);
+                        arr[x][y + 1] = 0;
+                    }
+                }
+                if (arr[x][y + 1] || (!arr[x][y + 1] && (!arr[x + 1][y] || !arr[x - 1][y])))
+                {
+                    if (!arr[x][y - 1] && (s[moves] == '?' || s[moves] == 'L'))
+                    {
+                        arr[x][y - 1] = 1;
+                        search(moves + 1, count, arr, x, y - 1);
+                        arr[x][y - 1] = 0;
+                    }
+                }
+            }
         }
     }
-};
+}
 
 int main(int argc, char *argv[])
 {
-    string inp;
-    cin >> inp;
-    queue<my *> paths; // up down left right
-    my *zero;
-    zero = new my();
-    bool possible = zero->set(0, 0, 0, 0);
-    paths.push(zero);
-    for (int i = 0; i < inp.size(); i++)
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cin >> s;
+    ll count = 0;
+    bool **arr;
+    arr = new bool *[7];
+    for (int i = 0; i < 7; i++)
     {
-        ll num = paths.size();
-        for (int j = 0; j < num; j++)
+        arr[i] = new bool[7];
+        for (int j = 0; j < 7; j++)
         {
-            my *p = paths.front();
-            if (inp[i] == '?' || inp[i] == 'D')
-            {
-                my *path;
-                path = new my(p->arr);
-                if (path->set(p->left, p->right, p->down + 1, p->up))
-                {
-                    paths.push(path);
-                }
-            }
-            if (inp[i] == '?' || inp[i] == 'U')
-            {
-                my *path;
-                path = new my(p->arr);
-                if (path->set(p->left, p->right, p->down, p->up + 1))
-                {
-                    paths.push(path);
-                }
-            }
-            if (inp[i] == '?' || inp[i] == 'L')
-            {
-                my *path;
-                path = new my(p->arr);
-                if (path->set(p->left + 1, p->right, p->down, p->up))
-                {
-                    paths.push(path);
-                }
-            }
-            if (inp[i] == '?' || inp[i] == 'R')
-            {
-                my *path;
-                path = new my(p->arr);
-                if (path->set(p->left, p->right + 1, p->down, p->up))
-                {
-                    paths.push(path);
-                }
-            }
-            paths.pop();
+            arr[i][j] = 0;
         }
-        cout << paths.size() << endl;
     }
-    cout << paths.size() << endl;
+    arr[0][0] = 1;
+    search(0, count, arr, 0, 0);
+    cout << count << endl;
 }

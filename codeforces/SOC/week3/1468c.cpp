@@ -7,7 +7,6 @@ using namespace std;
 
 // using namespace __gnu_pbds;
 
-
 #define ll long long
 #define ld long double
 #define fi first
@@ -70,6 +69,141 @@ int main(int argc, char *argv[])
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
+    ll n;
+    cin >> n;
+    ll min = 1, max = n;
+    cout << "? " << min << " " << max << endl;
+    cout.flush();
+    ll m2;
+    cin >> m2;
+    bool c1 = false, c2 = false;
+    while (true)
+    {
+        if (max == min)
+        {
+            cout << "! " << max << endl;
+            return 0;
+        }
+        if (max == min + 1)
+        {
+            cout << "! " << max + min - m2 << endl;
+            return 0;
+        }
+        ll mid = (min + max) / 2;
+        if (m2 > mid)
+        {
+            cout << "? " << mid << " " << max << endl;
+            ll newm2;
+            cin >> newm2;
+            if (newm2 == m2)
+            {
+                min = mid;
+                m2 = newm2;
+            }
+            else
+            {
 
-    
+                max = mid - 1;
+                c1 = true;
+                break;
+                // if (min == max)
+                // {
+                //     cout << "! " << max << endl;
+                //     return 0;
+                // }
+                // cout << "? " << min << " " << max << endl;
+                // cin >> m2;
+            }
+        }
+        else
+        {
+            cout << "? " << min << " " << mid << endl;
+            ll newm2;
+            cin >> newm2;
+            if (newm2 == m2)
+            {
+                max = mid;
+                m2 = newm2;
+            }
+            else
+            {
+                min = mid + 1;
+                c2 = true;
+                break;
+                // if (min == max)
+                // {
+                //     cout << "! " << max << endl;
+                //     return 0;
+                // }
+                // cout << "? " << min << " " << max << endl;
+                // cin >> m2;
+            }
+        }
+    }
+    if (c1) // m2 is greater than max
+    {
+        while (true)
+        {
+            if (max == min)
+            {
+                cout << "! " << max << endl;
+                return 0;
+            }
+            if (max == min + 1)
+            {
+                cout << "? " << min << " " << max << endl;
+                ll m;
+                cin >> m;
+                cout << "! " << max + min - m << endl;
+                return 0;
+            }
+
+            ll mid = (min + max) / 2;
+            cout << "? " << mid << " " << m2 << endl;
+            ll newm2;
+            cin >> newm2;
+            if (newm2 == m2)
+            {
+                min = mid;
+            }
+            else
+            {
+
+                max = mid - 1;
+            }
+        }
+    }
+    if (c2) // m2 is less than min
+    {
+        while (true)
+        {
+            if (max == min)
+            {
+                cout << "! " << max << endl;
+                return 0;
+            }
+            if (max == min + 1)
+            {
+                cout << "? " << min << " " << max << endl;
+                ll m;
+                cin >> m;
+                cout << "! " << max + min - m << endl;
+                return 0;
+            }
+
+            ll mid = (min + max) / 2;
+            cout << "? " << m2 << " " << mid << endl;
+            ll newm2;
+            cin >> newm2;
+            if (newm2 == m2)
+            {
+                max = mid;
+                m2 = newm2;
+            }
+            else
+            {
+                min = mid + 1;
+            }
+        }
+    }
 }

@@ -1,7 +1,9 @@
 #include <bits/stdc++.h>
+#include <cstdint>
+
 using namespace std;
 
-#define ll long long
+#define ll long long int
 #define ld long double
 #define fi first
 #define se second
@@ -58,26 +60,20 @@ void adv_tokenizer(string s, char del) // Split string
         cout << word << endl;
     }
 }
-
-bool comp(pll p1, pll p2)
+ll **recs;
+ll **lessthanequal;
+    
+void setup()
 {
-    return p1.fi < p2.fi || (p1.fi == p2.fi && p1.se < p2.se);
-}
-
-ll binsearch(vector<pll> v, ll elem){
-    ll i1 = 0, i2 = v.size()-1;
-    while(true){
-        ll mid = (i1+i2)/2;
-        if(v[mid].se < elem){
-            i1 = mid+1;
-        }
-        else if(v[mid].se == elem){
-            return mid;
-        }
-        else{
-            i2 = mid-1;
-        }
-        if(i1 >= i2) return i1;
+    recs = new ll *[1001];
+    for (int i = 0; i <= 1000; i++)
+    {
+        recs[i] = new ll[1001];
+    }
+    lessthanequal = new ll *[1001];
+    for (int i = 0; i <= 1000; i++)
+    {
+        lessthanequal[i] = new ll[1001];
     }
 }
 
@@ -85,49 +81,38 @@ void solve()
 {
     ll n, q;
     cin >> n >> q;
-    vector<pll> rects;
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i <= 1000; i++)
     {
-        pll p1;
-        cin >> p1.fi >> p1.se;
-        rects.pb(p1);
-    }
-    map<ll, vector<pll>> hw;
-    vector<ll> heights;
-    
-    sort(rects.begin(), rects.end(), comp);
-    for (int i = 0; i < n; i++)
-    {
-        if(hw.find(rects[i].fi) == hw.end()){
-            heights.pb(rects[i].fi);
-            hw[rects[i].fi].pb({0,0});
-            hw[rects[i].fi].pb({rects[i].se, rects[i].se});
-        }
-        else{
-            if(hw[rects[i].fi].back().se == rects[i].se){
-                hw[rects[i].fi].back().fi +=rects[i].se;
-            }
-            else hw[rects[i].fi].pb({hw[rects[i].fi].back().fi + rects[i].se, rects[i].se});
+        for (int j = 0; j <= 1000; j++)
+        {
+            recs[i][j] = 0;
         }
     }
-    for(int i = 0; i < q; i++){
-        ll ans = 0;
-        ll hs,ws,hb,wb;
+    for (int i = 0; i < n; i++)
+    {
+        ll h, w;
+        cin >> h >> w;
+        recs[h][w]++;
+    }
+    for (int i = 0; i <= 1000; i++)
+    {
+        lessthanequal[i][0] = 0;
+        lessthanequal[0][i] = 0;
+    }
+
+    for (int i = 1; i <= 1000; i++)
+    {
+        for (int j = 1; j <= 1000; j++)
+        {
+            lessthanequal[i][j] = i * j * recs[i][j] + lessthanequal[i - 1][j] + lessthanequal[i][j - 1] - lessthanequal[i - 1][j - 1];
+        }
+    }
+
+    for (int i = 0; i < q; i++)
+    {
+        ll hs, ws, hb, wb;
         cin >> hs >> ws >> hb >> wb;
-        ll index1 = upper_bound(heights.begin(), heights.end(), hs)-heights.begin(),index2 = lower_bound(heights.begin(), heights.end(), hb)-heights.begin();
-        //cout << index1 << " " << index2 << endl;
-        for(int j = index1; j < index2; j++){
-            vector<pll> v = hw[heights[j]];
-            ll i1 = binsearch(v, ws),i2 = binsearch(v, wb) ;
-            if(v[i1].se > ws){
-                i1--;
-            }
-            if(v[i2].se >= wb){
-                i2--;
-            }
-            ans += heights[j]*(v[i2].fi-v[i1].fi);
-        }
-        cout << ans << endl;
+        cout << lessthanequal[hb - 1][wb - 1] - lessthanequal[hs][wb - 1] - lessthanequal[hb - 1][ws] + lessthanequal[hs][ws] << endl;
     }
 }
 
@@ -135,6 +120,8 @@ int main(int argc, char *argv[])
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
+
+    setup();
     ll t;
     cin >> t;
     while (t--)

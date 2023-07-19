@@ -65,6 +65,27 @@ void adv_tokenizer(string s, char del) // Split string
     }
 }
 
+bool possible(ll* arr, ll n, ll time){
+    ll left = 0;
+    for(int i = 0; i < n; i++){
+        if(arr[i]>time){
+            left += arr[i] -time;
+        }
+        else{
+            left = left - (time-arr[i])/2;
+            if(left <= 0){
+                return true;
+            }
+        }
+    }
+    if(left <= 0){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
 void solve()
 {
     ll n,m;
@@ -78,14 +99,22 @@ void solve()
         cin >> num;
         arr[num-1]++;
     }
-    sort(arr, arr+n);
-    ll zero = 0;
-    for(int i = 0; i < n; i++){
-        if(arr[i] = 0) zero++;
-        else break;
-    }
-    for(int t = 0; true; t++){
-        
+    sort(arr, arr+n, greater<ll>());
+    ll max = arr[0], min = arr[n-1];
+    while(true){
+        if(max <= min){
+            cout << max << endl;
+            return;
+        }
+        ll mid = (max+min)/2;
+        bool pos = possible(arr, n, mid);
+        //cout<< pos << " " << n << " " << mid;
+        if(pos){
+            max = mid;
+        }
+        else{
+            min = mid+1;
+        }
     }
 }
 
